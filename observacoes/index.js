@@ -15,7 +15,7 @@ const observacoesPorLembreteId = {};
 //:id - variável que será passada na URL. Nesse caso, é o Id do lembrete em questão
 
 // função que irá inserir a observação no lembrete
-app.put('/lembretes/:id/observacoes', async (req, res) => {
+app.post('/lembretes/:id/observacoes', async (req, res) => {
     const idObs = uuidv4();
     const { texto } = req.body;
 

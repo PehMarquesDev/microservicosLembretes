@@ -30,7 +30,7 @@ app.get('/lembretes', (req, res) => {
 
 // Definição do método que fará a requisição PUT
 // Requisição assíncrona
-app.put('/lembretes', async (req, res) => {
+app.post('/lembretes', async (req, res) => {
     // Contador que irá gerar o Id de cada lembrete e irá passar pelos registros na memória
     contador++;
 
