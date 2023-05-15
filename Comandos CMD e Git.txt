@@ -1,0 +1,12 @@
+git clone 'endereço SSH ou link do repositório' - Para trazer o repositório do github à máquina
+git status - Para ver a situação do repositório. Se existem arquivos, alterações e commits para serem adicionados/feitos.
+git add -A - Para adicionar todos os arquivos e alterações ao próximo commit(Nome dado à unidade de mudança). -A serve para adicionar TODOS os arquivos.
+git commit -m "Comentário" - Para marcar um ponto, uma 'versão' do código
+git push - Enviar todos os commits para o GitHub
+
+# Comandos principais CMD
+
+pwd - Ver diretório atual
+cd 'dir' - trocar de diretório ou pasta
+mkdir 'dir' - Para criar uma pasta 
+ls - Para listar todos os arquivos dentro da pasta
