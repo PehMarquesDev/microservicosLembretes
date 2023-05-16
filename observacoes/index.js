@@ -10,6 +10,27 @@ const { v4: uuidv4 } = require('uuid');
 // Um lembrete da coleção de lembretes, pode ter uma coleção de várias observações
 const observacoesPorLembreteId = {};
 
+const funcoes = {
+    ObeservacaoClassificada: (observacao) => {
+        const observacoes =
+            observacoesPorLembreteId[observacao.lembreteId];
+        const obsParaAtualizar = observacoes.find(o => o.id ===
+            //find procura o primeiro objeto que supre determinado parametro
+            //Nesse caso, ele vai procurar o primeiro objeto que tiver o id da observação
+            observacao.id)
+        obsParaAtualizar.status = observacao.status;
+        axios.post('http://localhost:10000/eventos', {
+            tipo: "ObservacaoAtualizada",
+            dados: {
+                id: observacao.id,
+                texto: observacao.texto,
+                lembreteId: observacao.lembreteId,
+                status: observacao.status
+            }
+        });
+    }
+}
+
 //:id é um placeholder
 //exemplo: /lembretes/123456/observacoes
 //:id - variável que será passada na URL. Nesse caso, é o Id do lembrete em questão
@@ -27,14 +48,17 @@ app.post('/lembretes/:id/observacoes', async (req, res) => {
         //Caso não, retorna uma lista vazia
         observacoesPorLembreteId[req.params.id] || [];
     // Push adiciona itens à nova coleção. Id + texto
-    observacoesDoLembrete.push({ id: idObs, texto });
+    observacoesDoLembrete.push({ id: idObs, texto, status: 'aguardando' });
     //Substitui a coleção antiga pela que contém a nova observação
     observacoesPorLembreteId[req.params.id] =
         observacoesDoLembrete;
     await axios.post('http://localhost:10000/eventos', {
         tipo: "ObservacaoCriada",
         dados: {
-            id: idObs, texto, lembreteId: req.params.id
+            id: idObs,
+            texto,
+            lembreteId: req.params.id,
+            status: 'aguardando'
         }
     });
 
@@ -47,8 +71,12 @@ app.get('/lembretes/:id/observacoes', (req, res) => {
 });
 
 app.post("/eventos", (req, res) => {
-    console.log(req.body);
-    res.status(200).send({ msg: "ok" });
+    try{
+        funcoes[req.body.tipo](req.body.dados);
+    }
+    catch (err){
+        res.status(200).send({ msg: "ok" });
+    }   
 });
 
 app.listen(5000, (() => {
